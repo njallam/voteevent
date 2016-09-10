@@ -10,6 +10,9 @@ class EventsController < ApplicationController
   end
 
   def show
+    @attendances = @event.attendances
+    @votes = @attendances.where(voted: true).count
+    @total = @attendances.count
   end
 
   def vote
