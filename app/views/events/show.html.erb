@@ -12,6 +12,6 @@
   You cannot vote yet.
 <% end %>
 </p>
-<p><%= @votes %> out of <%= @total %> people have voted.</p>
+<p><strong><%= @votes %></strong> out of <strong><%= @total %></strong> people have voted.</p>
 
-<% if @revealed %><p> The final score is <%= @score %> (Average: <%= @average %>)<% end %>
+<% if @revealed %><p> The final score is <strong><%= @score %></strong> (Average: <strong><%= @average %></strong>)<% end %>
