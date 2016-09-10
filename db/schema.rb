@@ -12,14 +12,17 @@
 
 ActiveRecord::Schema.define(version: 20160910195152) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "attendances", force: :cascade do |t|
     t.integer  "event_id"
     t.integer  "person_id"
     t.boolean  "voted",      default: false
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
-    t.index ["event_id"], name: "index_attendances_on_event_id"
-    t.index ["person_id"], name: "index_attendances_on_person_id"
+    t.index ["event_id"], name: "index_attendances_on_event_id", using: :btree
+    t.index ["person_id"], name: "index_attendances_on_person_id", using: :btree
   end
 
   create_table "events", force: :cascade do |t|
@@ -38,4 +41,6 @@ ActiveRecord::Schema.define(version: 20160910195152) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "attendances", "events"
+  add_foreign_key "attendances", "people"
 end
