@@ -5,3 +5,5 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+nick = Person.create(name: 'Nick', ip: '127.0.0.1')
+Event.create(name: 'Noodles', date: DateTime.new(2016, 9, 6), people: [nick])
