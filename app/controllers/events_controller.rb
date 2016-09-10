@@ -5,13 +5,11 @@ class EventsController < ApplicationController
   before_action only: [:show, :vote, :reveal] do |controller|
     @event = Event.find(params[:id])
     @attendance = Attendance.find_by(event: @event, person: @person)
-    @voted = @attendance.voted
-    @occurred = @event.date < DateTime.now
-  end
-
-  before_action only: [:show, :vote] do |controller|
-    @voted = @attendance.voted
-    @occurred = @event.date < DateTime.now
+    @guest = !@attendance.nil?
+    if @guest then
+      @voted = @attendance.voted
+      @occurred = @event.date < DateTime.now
+    end
   end
 
   before_action only: [:show, :reveal] do |controller|
@@ -30,7 +28,7 @@ class EventsController < ApplicationController
   end
 
   def vote
-    if not @voted and @occurred then
+    if @guest and not @voted and @occurred then
       score = params[:score].to_i
       if score > 0 and score <= 10 then
         @event.score += score
@@ -42,7 +40,7 @@ class EventsController < ApplicationController
   end
 
   def reveal
-    if not @revealed and @voting_complete
+    if not @revealed and @guest and @voting_complete
       @event.revealed = true
       @event.save
     end

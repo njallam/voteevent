@@ -1,6 +1,8 @@
 <h1><%= @event.name %></h1>
 <p>
-<% if @voted then %>
+<% if not @guest then %>
+  You are not a guest.
+<% elsif @voted then %>
   You have already voted.
 <% elsif @occurred then %>
   You may now vote:
