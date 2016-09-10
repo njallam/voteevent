@@ -2,17 +2,31 @@ class EventsController < ApplicationController
   def index
   end
 
-  before_action only: [:show, :vote] do |controller|
+  before_action only: [:show, :vote, :reveal] do |controller|
     @event = Event.find(params[:id])
     @attendance = Attendance.find_by(event: @event, person: @person)
     @voted = @attendance.voted
     @occurred = @event.date < DateTime.now
   end
 
-  def show
+  before_action only: [:show, :vote] do |controller|
+    @voted = @attendance.voted
+    @occurred = @event.date < DateTime.now
+  end
+
+  before_action only: [:show, :reveal] do |controller|
     @attendances = @event.attendances
     @votes = @attendances.where(voted: true).count
     @total = @attendances.count
+    @revealed = @event.revealed
+    @voting_complete = @votes == @total
+  end
+
+  def show
+    if @revealed
+      @score = @event.score
+      @average = @score/@total
+    end
   end
 
   def vote
@@ -25,5 +39,13 @@ class EventsController < ApplicationController
         @attendance.save
       end
     end
+  end
+
+  def reveal
+    if not @revealed and @voting_complete
+      @event.revealed = true
+      @event.save
+    end
+    redirect_to @event
   end
 end

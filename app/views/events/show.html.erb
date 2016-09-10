@@ -13,3 +13,5 @@
 <% end %>
 </p>
 <p><%= @votes %> out of <%= @total %> people have voted.</p>
+
+<% if @revealed %><p> The final score is <%= @score %> (Average: <%= @average %>)<% end %>
