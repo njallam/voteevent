@@ -2,7 +2,7 @@ class EventsController < ApplicationController
   def index
   end
 
-  before_action only: [:show, :vote, :reveal] do |controller|
+  before_action only: [:show, :alt, :vote, :reveal] do |controller|
     @event = Event.find(params[:id])
     @attendance = Attendance.find_by(event: @event, person: @person)
     @guest = !@attendance.nil?
@@ -12,7 +12,7 @@ class EventsController < ApplicationController
     end
   end
 
-  before_action only: [:show, :reveal] do |controller|
+  before_action only: [:show, :alt, :reveal] do |controller|
     @attendances = @event.attendances
     @votes = @attendances.where(voted: true).count
     @total = @attendances.count
@@ -27,7 +27,19 @@ class EventsController < ApplicationController
     end
   end
 
+  def alt
+  end
+
   def vote
+    unless @guest then
+      @person = Person.find_by(passcode: params[:passcode])
+      @attendance = Attendance.find_by(event: @event, person: @person)
+      @guest = !@attendance.nil?
+      if @guest then
+        @voted = @attendance.voted
+        @occurred = @event.date < DateTime.now
+      end
+    end
     if @guest and not @voted and @occurred then
       score = params[:score].to_i
       if score > 0 and score <= 10 then

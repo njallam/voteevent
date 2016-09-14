@@ -1,0 +1,11 @@
+<h1><%= @event.name %></h1>
+<p>
+  <%= form_tag vote_path, method: :post do %>
+    <%= password_field_tag 'passcode' %>
+    <%= number_field_tag 'score', nil, min: 1, max: 10 %>
+    <%= submit_tag "Vote" %>
+  <% end %>
+</p>
+<p><strong><%= @votes %></strong> out of <strong><%= @total %></strong> people have voted.</p>
+
+<% if @revealed %><p> The final score is <strong><%= @score %></strong> (Average: <strong><%= @average %></strong>).</p><% end %>
